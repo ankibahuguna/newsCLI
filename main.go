@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/PuerkitoBio/goquery"
-	tm "github.com/buger/goterm"
+	//tm "github.com/buger/goterm":
 	"github.com/eidolon/wordwrap"
 	"github.com/fatih/color"
 	"github.com/manifoldco/promptui"
@@ -12,8 +12,6 @@ import (
 	"io"
 	"log"
 	"net/http"
-	"os/exec"
-	"runtime"
 	"strings"
 )
 
@@ -34,22 +32,18 @@ func main() {
 		return
 	}
 
-	if runtime.GOOS == "windows" {
-		err := exec.Command("rundll32", "url.dll,FileProtocolHandler", news[index].Link).Start()
-		fmt.Println(err, "Command lauched")
-	} else {
-		content, err := parseHTML(news[index].Link)
-		if err != nil {
-			fmt.Println("Some shit went wrong", err)
-		}
-		outPutToTerminal(content)
+	content, err := parseHTML(news[index].Link)
+
+	if err != nil {
+		fmt.Println("Some shit went wrong", err)
 	}
+	outPutToTerminal(content)
 }
 
 func getHeadLines(url string) ([]string, []News) {
 
 	var headlines []string
-	news, err := getNews("https://www.thehindu.com/feeder/default.rss")
+	news, err := getNews(url)
 
 	if err != nil {
 		panic("Couldn't parse RSS feed")
@@ -163,10 +157,11 @@ func getText(html io.Reader) (string, error) {
 }
 
 func outPutToTerminal(text string) {
-	tm.Clear()
+	//	tm.Clear()
 	d := color.New(color.FgHiYellow, color.Italic)
 	padded := d.Sprintf("%-72v", text)
 	fmt.Println(padded)
+	main()
 }
 
 func min(x, y int) int {
