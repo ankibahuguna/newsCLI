@@ -1,10 +1,11 @@
 package main
 
 import (
+	"bufio"
 	"errors"
 	"fmt"
 	"github.com/PuerkitoBio/goquery"
-	//tm "github.com/buger/goterm":
+	tm "github.com/buger/goterm"
 	"github.com/eidolon/wordwrap"
 	"github.com/fatih/color"
 	"github.com/manifoldco/promptui"
@@ -12,6 +13,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"os"
 	"strings"
 )
 
@@ -157,10 +159,22 @@ func getText(html io.Reader) (string, error) {
 }
 
 func outPutToTerminal(text string) {
-	//	tm.Clear()
+	tm.Clear()
 	d := color.New(color.FgHiYellow, color.Italic)
 	padded := d.Sprintf("%-72v", text)
 	fmt.Println(padded)
+	buf := bufio.NewReader(os.Stdin)
+	fmt.Println("> ")
+	ans, err := buf.ReadString('\n')
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+	if strings.TrimSpace(ans) == "q" {
+		fmt.Println("Bye")
+		os.Exit(0)
+	}
+	tm.Clear()
 	main()
 }
 
