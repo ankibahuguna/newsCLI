@@ -15,6 +15,8 @@ import (
 	"net/http"
 	"os"
 	"strings"
+        "os/exec"
+        "runtime"
 )
 
 type News struct {
@@ -56,7 +58,10 @@ func getHeadLines(url string) ([]string, []News) {
 
 	for _, val := range news {
 		title, description := val.Title, val.Description
-		description = description[0:min(len(description), 200)] + "..."
+                totalLength := len(title+description)
+                desLength := totalLength - len(description)
+
+		description = description[0:min(len(description),desLength )] + "..."
 		titleString := fmt.Sprintf("%s (%s)", white(title), green(description))
 		headlines = append(headlines, titleString)
 	}
@@ -162,9 +167,21 @@ func outPutToTerminal(text string) {
 	tm.Clear()
 	d := color.New(color.FgHiYellow, color.Italic)
 	padded := d.Sprintf("%-72v", text)
-	fmt.Println(padded)
+        var pager string
+        if runtime.GOOS == "windows" {
+            pager = "C:\\Windows\\System32\\more.com"
+        } else {
+            pager = "/usr/bin/less"
+        }
+        cmd := exec.Command(pager)
+        cmd.Stdin = strings.NewReader(padded)
+        cmd.Stdout = os.Stdout
+        err := cmd.Run()
+        if err != nil {
+            log.Fatal(err)
+        }
 	buf := bufio.NewReader(os.Stdin)
-	fmt.Println("> ")
+	fmt.Println("Press `q` to quit any other key to continue >> ")
 	ans, err := buf.ReadString('\n')
 	if err != nil {
 		fmt.Println(err)
