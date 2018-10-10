@@ -25,9 +25,49 @@ type News struct {
 	Link        string `json:"link"`
 }
 
+var news []News
+var headlines []string
+
 func main() {
 
-	headlines, news := getHeadLines("https://www.thehindu.com/feeder/default.rss")
+        args := os.Args[1:]
+
+        category := "feeder/default.rss"
+
+        if  len(args) > 0 {
+            category = strings.TrimSpace(args[0])+"/"+category
+        }
+
+        url := fmt.Sprintf("https://www.thehindu.com/%v",category);
+
+        var err error
+        news, err = getNews(url)
+
+        if err != nil {
+            fmt.Println(err)
+            panic("Something went wrong")
+        }
+
+
+	green := color.New(color.FgGreen).SprintFunc()
+	white := color.New(color.FgWhite).SprintFunc()
+
+	for _, val := range news {
+		title, description := val.Title, val.Description
+                totalLength :=  len(title+description)- len(description)
+ 
+		description = description[0:min(len(description),totalLength )] + "..."
+		titleString := fmt.Sprintf("%s (%s)", white(title), green(description))
+		headlines = append(headlines, titleString)
+	}
+
+
+        renderOutPut()
+
+
+}
+
+func renderOutPut() {
 
 	index, err := promptUI("HeadLines", 20, headlines)
 
@@ -42,31 +82,6 @@ func main() {
 		fmt.Println("Some shit went wrong", err)
 	}
 	outPutToTerminal(content)
-}
-
-func getHeadLines(url string) ([]string, []News) {
-
-	var headlines []string
-	news, err := getNews(url)
-
-	if err != nil {
-		panic("Couldn't parse RSS feed")
-	}
-
-	green := color.New(color.FgGreen).SprintFunc()
-	white := color.New(color.FgWhite).SprintFunc()
-
-	for _, val := range news {
-		title, description := val.Title, val.Description
-                totalLength := len(title+description)
-                desLength := totalLength - len(description)
-
-		description = description[0:min(len(description),desLength )] + "..."
-		titleString := fmt.Sprintf("%s (%s)", white(title), green(description))
-		headlines = append(headlines, titleString)
-	}
-
-	return headlines, news
 }
 
 func promptUI(label string, size int, items []string) (int, error) {
@@ -167,11 +182,9 @@ func outPutToTerminal(text string) {
 	tm.Clear()
 	d := color.New(color.FgHiYellow, color.Italic)
 	padded := d.Sprintf("%-72v", text)
-        var pager string
+        pager := "/usr/bin/less"
         if runtime.GOOS == "windows" {
             pager = "C:\\Windows\\System32\\more.com"
-        } else {
-            pager = "/usr/bin/less"
         }
         cmd := exec.Command(pager)
         cmd.Stdin = strings.NewReader(padded)
@@ -180,6 +193,10 @@ func outPutToTerminal(text string) {
         if err != nil {
             log.Fatal(err)
         }
+        var input string
+        fmt.Scanln(&input)
+        fmt.Scanln(&input)
+
 	buf := bufio.NewReader(os.Stdin)
 	fmt.Println("Press `q` to quit any other key to continue >> ")
 	ans, err := buf.ReadString('\n')
@@ -192,7 +209,7 @@ func outPutToTerminal(text string) {
 		os.Exit(0)
 	}
 	tm.Clear()
-	main()
+	renderOutPut()
 }
 
 func min(x, y int) int {
