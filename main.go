@@ -179,7 +179,7 @@ func outPutToTerminal(text string) {
 	tm.Clear()
 	d := color.New(color.FgHiYellow, color.Italic)
 	padded := d.Sprintf("%-72v", text)
-	pager := "/usr/bin/less"
+	pager := "/usr/bin/more"
 	if runtime.GOOS == "windows" {
 		pager = "C:\\Windows\\System32\\more.com"
 	}
