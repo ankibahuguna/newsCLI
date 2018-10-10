@@ -192,7 +192,6 @@ func outPutToTerminal(text string) {
 	}
 	var input string
 	fmt.Scanln(&input)
-	fmt.Scanln(&input)
 
 	buf := bufio.NewReader(os.Stdin)
 	fmt.Println("Press `q` to quit any other key to continue >> ")
