@@ -14,9 +14,9 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"os/exec"
+	"runtime"
 	"strings"
-        "os/exec"
-        "runtime"
 )
 
 type News struct {
@@ -30,40 +30,37 @@ var headlines []string
 
 func main() {
 
-        args := os.Args[1:]
+	args := os.Args[1:]
 
-        category := "feeder/default.rss"
+	category := "feeder/default.rss"
 
-        if  len(args) > 0 {
-            category = strings.TrimSpace(args[0])+"/"+category
-        }
+	if len(args) > 0 {
+		category = strings.TrimSpace(args[0]) + "/" + category
+	}
 
-        url := fmt.Sprintf("https://www.thehindu.com/%v",category);
+	url := fmt.Sprintf("https://www.thehindu.com/%v", category)
 
-        var err error
-        news, err = getNews(url)
+	var err error
+	news, err = getNews(url)
 
-        if err != nil {
-            fmt.Println(err)
-            panic("Something went wrong")
-        }
-
+	if err != nil {
+		fmt.Println(err)
+		panic("Something went wrong")
+	}
 
 	green := color.New(color.FgGreen).SprintFunc()
 	white := color.New(color.FgWhite).SprintFunc()
 
 	for _, val := range news {
 		title, description := val.Title, val.Description
-                totalLength :=  len(title+description)- len(description)
- 
-		description = description[0:min(len(description),totalLength )] + "..."
+		totalLength := len(title+description) - len(description)
+
+		description = description[0:min(len(description), totalLength)] + "..."
 		titleString := fmt.Sprintf("%s (%s)", white(title), green(description))
 		headlines = append(headlines, titleString)
 	}
 
-
-        renderOutPut()
-
+	renderOutPut()
 
 }
 
@@ -182,20 +179,20 @@ func outPutToTerminal(text string) {
 	tm.Clear()
 	d := color.New(color.FgHiYellow, color.Italic)
 	padded := d.Sprintf("%-72v", text)
-        pager := "/usr/bin/less"
-        if runtime.GOOS == "windows" {
-            pager = "C:\\Windows\\System32\\more.com"
-        }
-        cmd := exec.Command(pager)
-        cmd.Stdin = strings.NewReader(padded)
-        cmd.Stdout = os.Stdout
-        err := cmd.Run()
-        if err != nil {
-            log.Fatal(err)
-        }
-        var input string
-        fmt.Scanln(&input)
-        fmt.Scanln(&input)
+	pager := "/usr/bin/less"
+	if runtime.GOOS == "windows" {
+		pager = "C:\\Windows\\System32\\more.com"
+	}
+	cmd := exec.Command(pager)
+	cmd.Stdin = strings.NewReader(padded)
+	cmd.Stdout = os.Stdout
+	err := cmd.Run()
+	if err != nil {
+		log.Fatal(err)
+	}
+	var input string
+	fmt.Scanln(&input)
+	fmt.Scanln(&input)
 
 	buf := bufio.NewReader(os.Stdin)
 	fmt.Println("Press `q` to quit any other key to continue >> ")
