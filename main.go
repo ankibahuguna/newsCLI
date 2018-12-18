@@ -157,7 +157,7 @@ func getText(html io.Reader) (string, error) {
 		return "", err
 	}
 	wrapper := wordwrap.Wrapper(180, false)
-	doc.Find("div.article").Children().Each(func(i int, s *goquery.Selection) {
+	doc.Find("h2.intro").Parent().Children().Each(func(i int, s *goquery.Selection) {
 
 		idString, _ := s.Attr("id")
 
@@ -165,7 +165,6 @@ func getText(html io.Reader) (string, error) {
 			s.Children().Each(func(j int, el *goquery.Selection) {
 				body = body + wrapper(el.Text())
 				body = body + "\n\n"
-
 			})
 
 			return
@@ -177,7 +176,7 @@ func getText(html io.Reader) (string, error) {
 
 func outPutToTerminal(text string) {
 	tm.Clear()
-	d := color.New(color.FgHiYellow, color.Italic)
+	d := color.New(color.FgGreen, color.Italic)
 	padded := d.Sprintf("%-72v", text)
 	pager := "/usr/bin/more"
 	if runtime.GOOS == "windows" {
