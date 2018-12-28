@@ -138,6 +138,9 @@ func parseHTML(url string) (string, error) {
 }
 
 func getArticle(url string) (io.Reader, error) {
+	green := color.New(color.FgGreen).SprintFunc()
+	fmt.Println(green(url))
+
 	resp, err := http.Get(url)
 
 	if err != nil {
@@ -157,7 +160,7 @@ func getText(html io.Reader) (string, error) {
 		return "", err
 	}
 	wrapper := wordwrap.Wrapper(180, false)
-	doc.Find("div.article").Children().Each(func(i int, s *goquery.Selection) {
+	doc.Find("div.author-bottom").Parent().Prev().Children().Each(func(i int, s *goquery.Selection) {
 
 		idString, _ := s.Attr("id")
 
