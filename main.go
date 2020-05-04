@@ -32,27 +32,29 @@ func main() {
 	}
 
 	headlines := getHeadLines(news)
-	index, err := ui.ShowPrompt("HeadLines", 20, headlines)
+	for {
+		index, err := ui.ShowHeadLines("HeadLines", 20, headlines)
 
-	if err != nil {
-		fmt.Printf("Prompt failed %v\n", err)
-		panic(err)
+		if err != nil {
+			fmt.Printf("Prompt failed %v\n", err)
+			panic(err)
+		}
+
+		body, err := request.GetArticle(news[index].Link)
+
+		if err != nil {
+			panic(err)
+		}
+
+		content, err := parser.ParseHTML(body)
+
+		if err != nil {
+			panic(err)
+		}
+
+		ui.RenderArticle(content)
+		ui.ShowPrompt()
 	}
-
-	body, err := request.GetArticle(news[index].Link)
-
-	if err != nil {
-		fmt.Println("Some shit went wrong", err)
-		panic(err)
-	}
-
-	content, err := parser.ParseHTML(body)
-
-	if err != nil {
-		panic(err)
-	}
-
-	ui.RenderArticle(content)
 
 }
 

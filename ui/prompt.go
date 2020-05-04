@@ -1,25 +1,29 @@
 package ui
 
 import (
+	"bufio"
 	"fmt"
+	"os"
+	"strings"
 
-	"github.com/manifoldco/promptui"
+	tm "github.com/buger/goterm"
 )
 
-func ShowPrompt(label string, size int, items []string) (int, error) {
+func ShowPrompt() {
 
-	prompt := promptui.Select{
-		Label: label,
-		Items: items,
-		Size:  size,
-	}
+	var input string
+	fmt.Scanln(&input)
 
-	index, _, err := prompt.Run()
-
+	buf := bufio.NewReader(os.Stdin)
+	fmt.Println("Press `q` to quit any other key to continue >> ")
+	ans, err := buf.ReadString('\n')
 	if err != nil {
-		fmt.Printf("Prompt failed %v\n", err)
-		return -1, err
+		fmt.Println(err)
+		os.Exit(1)
 	}
-
-	return index, nil
+	if strings.TrimSpace(ans) == "q" {
+		fmt.Println("Bye")
+		os.Exit(0)
+	}
+	tm.Clear()
 }
