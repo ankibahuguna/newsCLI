@@ -160,14 +160,13 @@ func getText(html io.Reader) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	wrapper := wordwrap.Wrapper(120, false)
 	doc.Find("div.author-bottom").Parent().Prev().Children().Each(func(i int, s *goquery.Selection) {
 
 		idString, _ := s.Attr("id")
 
 		if strings.Contains(idString, "content-body-") {
 			s.Children().Each(func(j int, el *goquery.Selection) {
-				body = body + wrapper(el.Text())
+				body = body + el.Text()
 				body = body + "\n\n"
 			})
 
@@ -175,6 +174,7 @@ func getText(html io.Reader) (string, error) {
 		}
 	})
 
+	wrapper := wordwrap.Wrapper(120, false)
 	return wrapper(body), e
 }
 
