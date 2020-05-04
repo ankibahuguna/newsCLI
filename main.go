@@ -4,12 +4,6 @@ import (
 	"bufio"
 	"errors"
 	"fmt"
-	"github.com/PuerkitoBio/goquery"
-	tm "github.com/buger/goterm"
-	"github.com/eidolon/wordwrap"
-	"github.com/fatih/color"
-	"github.com/manifoldco/promptui"
-	"github.com/mmcdole/gofeed"
 	"io"
 	"log"
 	"net/http"
@@ -17,6 +11,13 @@ import (
 	"os/exec"
 	"runtime"
 	"strings"
+
+	"github.com/PuerkitoBio/goquery"
+	tm "github.com/buger/goterm"
+	"github.com/eidolon/wordwrap"
+	"github.com/fatih/color"
+	"github.com/manifoldco/promptui"
+	"github.com/mmcdole/gofeed"
 )
 
 type News struct {
@@ -159,7 +160,7 @@ func getText(html io.Reader) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	wrapper := wordwrap.Wrapper(180, false)
+	wrapper := wordwrap.Wrapper(120, false)
 	doc.Find("div.author-bottom").Parent().Prev().Children().Each(func(i int, s *goquery.Selection) {
 
 		idString, _ := s.Attr("id")
@@ -174,12 +175,12 @@ func getText(html io.Reader) (string, error) {
 		}
 	})
 
-	return body, e
+	return wrapper(body), e
 }
 
 func outPutToTerminal(text string) {
 	tm.Clear()
-	d := color.New(color.FgGreen, color.Italic)
+	d := color.New(color.FgWhite, color.Italic)
 	padded := d.Sprintf("%-72v", text)
 	pager := "/usr/bin/more"
 	if runtime.GOOS == "windows" {
