@@ -18,6 +18,8 @@ github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSs
 github.com/davecgh/go-spew v1.1.1/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/eidolon/wordwrap v0.0.0-20161011182207-e0f54129b8bb h1:ioQwBmKdOCpMVS/bDaESqNWXIE/aw4+gsVtysCGMWZ4=
 github.com/eidolon/wordwrap v0.0.0-20161011182207-e0f54129b8bb/go.mod h1:ZAPs+OyRzeVJFGvXVDVffgCzQfjg3qU9Ig8G/MU3zZ4=
+github.com/ericchiang/pup v0.4.0 h1:h9ahJXbHA3V8MFfAmasxi8DCx0Gu+aLAAEtb8Q3KCOo=
+github.com/ericchiang/pup v0.4.0/go.mod h1:PpPzKkuAB7ypCQf9+wxC5MzaGaIDdgjtlpvc/0NaTJc=
 github.com/fatih/color v1.7.0 h1:DkWD4oS2D8LGGgTQ6IvwJJXSL5Vp2ffcQg58nFV38Ys=
 github.com/fatih/color v1.7.0/go.mod h1:Zm6kSWBoL9eyXnKyktHP6abPY2pDugNf5KwzbycvMj4=
 github.com/golang/lint v0.0.0-20181026193005-c67002cb31c3 h1:I4BOK3PBMjhWfQM2zPJKK7lOBGsrsvOB7kBELP33hiE=
