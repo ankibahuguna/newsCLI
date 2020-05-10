@@ -9,12 +9,12 @@ import (
 	"github.com/mmcdole/gofeed"
 )
 
-func GetNews(url string) ([]types.News, error) {
+func GetArticleList(feedUrl string) ([]types.News, error) {
 
 	var news []types.News
 
 	fp := gofeed.NewParser()
-	feed, err := fp.ParseURL(url)
+	feed, err := fp.ParseURL(feedUrl)
 
 	if err != nil {
 		log.Println(err, "Some shit went wrong")

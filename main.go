@@ -20,13 +20,13 @@ func main() {
 		category = strings.TrimSpace(args[0]) + "/" + category
 	}
 
-	url := fmt.Sprintf("https://www.thehindu.com/%v", category)
+	feedUrl := fmt.Sprintf("https://www.thehindu.com/%v", category)
 
-	news, err := request.GetNews(url)
+	news, err := request.GetArticleList(feedUrl)
 
 	if err != nil {
 		fmt.Println(err)
-		panic("Something went wrong")
+		panic("Could not parse RSS feed.")
 	}
 
 	for {
@@ -40,7 +40,8 @@ func main() {
 		body, err := request.GetArticle(news[index].Link)
 
 		if err != nil {
-			panic(err)
+			fmt.Println(err)
+			panic("Could not get the article")
 		}
 
 		content, err := parser.ParseHTML(body)
