@@ -8,6 +8,7 @@ import (
 	"github.com/ankibahuguna/news/parser"
 	"github.com/ankibahuguna/news/request"
 	"github.com/ankibahuguna/news/ui"
+	tm "github.com/buger/goterm"
 )
 
 func main() {
@@ -51,7 +52,16 @@ func main() {
 		}
 
 		ui.RenderArticle(content)
-		ui.ShowPrompt()
+		fmt.Println()
+		fmt.Println("Press `q` to quit any other key to continue >> ")
+		ans, _ := ui.ShowPrompt()
+
+		if !ans {
+			fmt.Println("Exiting")
+			break
+		}
+		tm.Clear()
+
 	}
 
 }
