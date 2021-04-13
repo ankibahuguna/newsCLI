@@ -5,7 +5,6 @@ import (
 	"strings"
 
 	"github.com/PuerkitoBio/goquery"
-	"github.com/eidolon/wordwrap"
 )
 
 func ParseHTML(html io.Reader) (string, error) {
@@ -30,7 +29,5 @@ func ParseHTML(html io.Reader) (string, error) {
 			return
 		}
 	})
-
-	wrapper := wordwrap.Wrapper(120, true)
-	return wrapper(body), e
+	return body, e
 }
