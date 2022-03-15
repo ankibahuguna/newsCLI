@@ -1,7 +1,10 @@
 package parser
 
 import (
+	"fmt"
 	"io"
+	"log"
+	"os"
 	"strings"
 
 	"github.com/PuerkitoBio/goquery"
@@ -14,11 +17,14 @@ func ParseHTML(html io.Reader) (string, error) {
 	doc, err := goquery.NewDocumentFromReader(html)
 
 	if err != nil {
-		return "", err
+		log.Fatal(err)
+		os.Exit(1)
 	}
-	doc.Find("div.author-bottom").Parent().Prev().Children().Each(func(i int, s *goquery.Selection) {
+
+	doc.Find("div.article").Children().Each(func(i int, s *goquery.Selection) {
 
 		idString, _ := s.Attr("id")
+		fmt.Println("idStirng", idString)
 
 		if strings.Contains(idString, "content-body-") {
 			s.Children().Each(func(j int, el *goquery.Selection) {
