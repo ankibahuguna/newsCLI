@@ -1,7 +1,6 @@
 package parser
 
 import (
-	"fmt"
 	"io"
 	"log"
 	"os"
@@ -24,8 +23,6 @@ func ParseHTML(html io.Reader) (string, error) {
 	doc.Find("div.article").Children().Each(func(i int, s *goquery.Selection) {
 
 		idString, _ := s.Attr("id")
-		fmt.Println("idStirng", idString)
-
 		if strings.Contains(idString, "content-body-") {
 			s.Children().Each(func(j int, el *goquery.Selection) {
 				body = body + el.Text()
