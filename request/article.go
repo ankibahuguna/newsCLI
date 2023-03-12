@@ -6,9 +6,7 @@ import (
 )
 
 func GetArticle(url string) (io.Reader, error) {
-
 	resp, err := http.Get(url)
-
 	if err != nil {
 		return nil, err
 	}

@@ -17,7 +17,7 @@ func GetArticleList(feedUrl string) ([]types.News, error) {
 	feed, err := fp.ParseURL(feedUrl)
 
 	if err != nil {
-		log.Println(err, "Some shit went wrong")
+		log.Println(err, "Couldn't parse the feed URL")
 		return nil, errors.New("Couldn't parse RSS feed")
 	}
 

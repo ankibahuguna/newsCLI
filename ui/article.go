@@ -16,11 +16,9 @@ func RenderArticle(text string) {
 	f := Formatter{
 		Writer: os.Stdout,
 		Indent: []byte(" "),
-		Width:  120,
+		Width:  90,
 	}
 	tm.Clear()
-	//	_, err := f.Write([]byte(padded))
-	//d := color.New(color.FgWhite, color.Italic)
 	pager := "/usr/bin/less"
 	if runtime.GOOS == "windows" {
 		pager = "C:\\Windows\\System32\\more.com"
